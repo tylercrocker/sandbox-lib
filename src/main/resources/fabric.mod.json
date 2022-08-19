@@ -1,12 +1,13 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "sandbox-lib",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Sandbox Lib",
+  "description": "Collection of helpers that we use across our projects.",
   "authors": [
-    "Me!"
+    "Tyler Crocker",
+    "Brent Crocker"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -18,12 +19,8 @@
 
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "net.fabricmc.example.ExampleMod"
-    ]
   },
   "mixins": [
-    "modid.mixins.json"
   ],
 
   "depends": {
