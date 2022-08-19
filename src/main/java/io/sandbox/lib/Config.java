@@ -1,4 +1,4 @@
-package net.sandbox.lib;
+package io.sandbox.lib;
 
 import java.io.File;
 import java.io.FileInputStream;
