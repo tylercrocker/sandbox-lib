@@ -10,8 +10,8 @@
     "Brent Crocker"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://www.sandbox.io/",
+    "sources": "https://github.com/sandbox-mc/sandbox-lib"
   },
 
   "license": "CC0-1.0",
@@ -30,6 +30,5 @@
     "java": ">=17"
   },
   "suggests": {
-    "another-mod": "*"
   }
 }
