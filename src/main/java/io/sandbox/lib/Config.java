@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -25,7 +27,23 @@ public class Config<T> {
 
 	public Config(Class<T> type, String configFilePath) {
 		this(type);
-		this.configFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), configFilePath.endsWith(".json") ? configFilePath : (configFilePath + ".json"));
+
+		File baseFolder = FabricLoader.getInstance().getConfigDir().toFile();
+		String[] filePath = configFilePath.split("/");
+		
+
+		// File name will be the last item, let's pull it off and ensure it ends in .json
+		String fileName = filePath[filePath.length - 1];
+		fileName = fileName.endsWith(".json") ? fileName : (fileName + ".json");
+
+		if (filePath.length > 1) {
+			// We need to ensure that any folders in the path exist.
+			String[] foldersInPath = Arrays.copyOf(filePath, filePath.length - 1);
+			baseFolder = new File(baseFolder, String.join("/", foldersInPath));
+			baseFolder.mkdirs();
+		}
+
+		this.configFile = new File(baseFolder, fileName);
 		this.readConfigFromFile();
 	}
 
@@ -36,6 +54,15 @@ public class Config<T> {
 	}
 
 	public T getConfig() {
+		if (this.config == null) {
+			try {
+				// If we had no config (usually because the config file didn't exist yet) then we can just initialize the defaults from our config class.
+				this.config = this.configClass.getConstructor().newInstance();
+			} catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+				// This catch is mostly just to make the compiler happy.
+				e.printStackTrace();
+			}
+		}
 		return this.config;
 	}
 
@@ -69,7 +96,7 @@ public class Config<T> {
 	private void createEmptyConfigFile() {
     JsonObject object = new JsonObject();
 
-    try (FileOutputStream stream = new FileOutputStream(configFile)) {
+    try (FileOutputStream stream = new FileOutputStream(this.configFile)) {
       stream.write(GSON.toJson(object).getBytes());
     } catch (Exception e) {
       e.printStackTrace();
