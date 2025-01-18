@@ -9,7 +9,8 @@ public class BlockHelper {
   public static Block getBlockFromId(String blockId) {
     if (blockId == null) { return null; }
 
-    Block foundBlock = Registries.BLOCK.get(new Identifier(blockId));
+    Identifier identifier = Identifier.tryParse(blockId);
+    Block foundBlock = Registries.BLOCK.get(identifier);
 
     if (foundBlock == Blocks.AIR && blockId != "minecraft:air") { return null; }
 
